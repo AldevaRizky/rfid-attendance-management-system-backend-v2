@@ -27,6 +27,20 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'nip',
+        'role', // admin,employee
+        'division_id',
+        'position_id',
+        'education_id',
+        'rfid_card_id',
+        'phone_number',
+        'gender',
+        'birth_date',
+        'birth_place',
+        'city',
+        'address',
+        'join_date',
+        'status',
     ];
 
     /**
@@ -48,6 +62,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'birth_date' => 'date',
+        'join_date' => 'date',
     ];
 
     /**
@@ -58,4 +74,36 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Relationship with the Division model.
+     */
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+    /**
+     * Relationship with the Position model.
+     */
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
+
+    /**
+     * Relationship with the Education model.
+     */
+    public function education()
+    {
+        return $this->belongsTo(Education::class);
+    }
+
+    /**
+     * Relationship with the RfidCard model.
+     */
+    public function rfidCard()
+    {
+        return $this->belongsTo(RfidCard::class, 'rfid_card_id');
+    }
 }
