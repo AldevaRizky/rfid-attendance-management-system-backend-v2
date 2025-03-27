@@ -1,20 +1,43 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
+        <div class="flex justify-between h-16 items-center"> <!-- Tambahkan items-center -->
+            <!-- Bagian kiri -->
+            <div class="flex items-center space-x-8">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="shrink-0">
                     <a href="{{ route('dashboard') }}">
                         <x-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <div class="hidden sm:flex space-x-8">
+                    @if(auth()->user()->role === 'admin')
+                        <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <!-- Dropdown Master Data -->
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none">
+                                Master Data
+                                <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div x-show="open" @click.away="open = false" class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Pendidikan
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <x-nav-link href="{{ route('employee.dashboard') }}" :active="request()->routeIs('employee.dashboard')">
+                            {{ __('Employee Dashboard') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
