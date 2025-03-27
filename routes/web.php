@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +18,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    // Admin routes
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
+    });
+
+    // Employee routes
+    Route::middleware(['role:employee'])->group(function () {
+        Route::get('/employee/dashboard', [DashboardController::class, 'employee'])->name('employee.dashboard');
+    });
+
+    // Redirect based on role after login
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('employee.dashboard');
     })->name('dashboard');
 });
