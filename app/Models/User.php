@@ -102,8 +102,8 @@ class User extends Authenticatable
     /**
      * Relationship with the RfidCard model.
      */
-    public function rfidCard()
+    public function rfidCards()
     {
-        return $this->belongsTo(RfidCard::class, 'rfid_card_id');
+        return $this->hasMany(RfidCard::class);
     }
 }
