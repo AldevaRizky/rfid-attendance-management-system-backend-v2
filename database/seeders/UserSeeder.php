@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
             'nip' => '12345678',
-            'role' => 'admin',
+            'role' => 'Admin',
             'division_id' => null,
             'position_id' => null,
             'education_id' => null,
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             'city' => 'Bandung',
             'address' => 'Jl. Employee No. 2',
             'join_date' => '2021-06-01',
-            'status' => 'active',
+            'status' => 'Active',
             'remember_token' => Str::random(10),
         ]);
     }
