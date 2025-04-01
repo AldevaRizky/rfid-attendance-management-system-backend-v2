@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rfid_cards', function (Blueprint $table) {
             $table->id();
             $table->string('card_number', 50)->unique();
-            $table->enum('status', ['active', 'inactive']);
+            $table->enum('status', ['Active', 'Inactive','Blocked']);
             $table->date('issued_date')->nullable();
             $table->date('expired_date')->nullable();
             $table->timestamps();
