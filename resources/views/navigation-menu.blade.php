@@ -14,12 +14,21 @@
                 <!-- Navigation Links -->
                 <div class="hidden sm:flex space-x-8">
                     @if(auth()->user()->role === 'admin')
+                        <!-- Dashboard -->
                         <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('admin.rfid-cards.index') }}" :active="request()->routeIs('admin.rfid-cards.index')">
+                            {{ __('RFID Card') }}
+                        </x-nav-link>
+                        <x-nav-link href="{{ route('admin.employees.index') }}" :active="request()->routeIs('admin.employees.index')">
+                            {{ __('Employee') }}
+                        </x-nav-link>
+
                         <!-- Dropdown Master Data -->
                         <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none">
+                            <button @click="open = !open" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                                :class="{ 'border-b-2 border-blue-500 text-blue-600': open || {{ request()->routeIs('admin.divisions.index', 'admin.positions.index', 'admin.educations.index', 'admin.shifts.index', 'admin.admins.index') ? 'true' : 'false' }} }">
                                 Master Data
                                 <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -28,8 +37,26 @@
 
                             <!-- Dropdown Menu -->
                             <div x-show="open" @click.away="open = false" class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    Pendidikan
+                                <a href="{{ route('admin.divisions.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    :class="{ 'border-l-4 border-blue-500 bg-blue-100 text-blue-600': {{ request()->routeIs('admin.divisions.index') ? 'true' : 'false' }} }">
+                                    Division
+                                </a>
+                                <a href="{{ route('admin.positions.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    :class="{ 'border-l-4 border-blue-500 bg-blue-100 text-blue-600': {{ request()->routeIs('admin.positions.index') ? 'true' : 'false' }} }">
+                                    Position
+                                </a>
+                                <a href="{{ route('admin.educations.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    :class="{ 'border-l-4 border-blue-500 bg-blue-100 text-blue-600': {{ request()->routeIs('admin.educations.index') ? 'true' : 'false' }} }">
+                                    Education
+                                </a>
+                                <a href="{{ route('admin.shifts.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    :class="{ 'border-l-4 border-blue-500 bg-blue-100 text-blue-600': {{ request()->routeIs('admin.shifts.index') ? 'true' : 'false' }} }">
+                                    Shift
+                                </a>
+                                <div class="border-t border-gray-200"></div>
+                                <a href="{{ route('admin.admins.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    :class="{ 'border-l-4 border-blue-500 bg-blue-100 text-blue-600': {{ request()->routeIs('admin.admins.index') ? 'true' : 'false' }} }">
+                                    Admin
                                 </a>
                             </div>
                         </div>
@@ -39,6 +66,7 @@
                         </x-nav-link>
                     @endif
                 </div>
+
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
