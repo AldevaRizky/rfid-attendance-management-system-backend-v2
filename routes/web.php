@@ -20,8 +20,17 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Admin routes
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
+    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+
+        // Division Management
+        Route::resource('divisions', \App\Http\Controllers\Admin\DivisionController::class)->except(['show']);
+        Route::resource('positions', \App\Http\Controllers\Admin\PositionController::class)->except(['show']);
+        Route::resource('educations', \App\Http\Controllers\Admin\EducationController::class)->except(['show']);
+        Route::resource('shifts', \App\Http\Controllers\Admin\ShiftController::class)->except(['show']);
+        Route::resource('rfid-cards', \App\Http\Controllers\Admin\RfidCardController::class)->except(['show']);
+        Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class)->except(['show']);
+        Route::resource('admins', \App\Http\Controllers\Admin\AdminController::class)->except(['show']);
     });
 
     // Employee routes
@@ -31,9 +40,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Redirect based on role after login
     Route::get('/dashboard', function () {
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-        return redirect()->route('employee.dashboard');
+        return auth()->user()->role === 'admin'
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('employee.dashboard');
     })->name('dashboard');
 });
