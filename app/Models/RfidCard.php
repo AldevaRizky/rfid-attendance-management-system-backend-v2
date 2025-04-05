@@ -11,6 +11,11 @@ class RfidCard extends Model
 
     protected $fillable = ['card_number', 'status', 'issued_date', 'expired_date', 'user_id'];
 
+    protected $casts = [
+        'issued_date' => 'datetime',
+        'expired_date' => 'datetime'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
