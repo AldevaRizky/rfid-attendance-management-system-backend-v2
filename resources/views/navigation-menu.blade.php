@@ -202,8 +202,13 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                    <div class="shrink-0 me-3">
-                        <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                    <div
+                        x-data="{ photoPreview: '{{ Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('images/default-profile.png') }}' }"
+                        class="shrink-0 me-3"
+                    >
+                        <img :src="photoPreview"
+                             class="h-10 w-10 rounded-full object-cover"
+                             alt="{{ Auth::user()->name }}" />
                     </div>
                 @endif
 
