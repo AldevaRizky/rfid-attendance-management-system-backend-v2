@@ -106,4 +106,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(RfidCard::class);
     }
+
+    public function attendance()
+    {
+        return $this->hasMany(AttendanceLog::class);
+    }
+
+    public function leaves()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
 }
