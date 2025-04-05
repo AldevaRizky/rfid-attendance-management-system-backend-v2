@@ -13,12 +13,24 @@
                     <h3 class="text-lg font-semibold text-gray-700">
                         {{ now()->translatedFormat('l, d F Y') }}
                     </h3>
+                    @if($status === 'weekend')
+                        <p class="text-sm text-red-600">Hari ini adalah hari {{ $currentDay }}, kantor sedang libur.</p>
+                    @endif
                     <p class="text-sm text-gray-600" id="live-time"></p>
                 </div>
 
                 <!-- Absensi -->
                 <div class="mt-6 flex gap-4 justify-center">
-                    @if($status === 'leave' || $status === 'sick')
+                    @if($status === 'weekend')
+                        <div class="flex-1 bg-green-200 border border-green-400 text-green-700 rounded-lg p-6 shadow-md text-center">
+                            <h2 class="text-lg font-bold">Absen Masuk</h2>
+                            <p class="text-gray-600">Libur</p>
+                        </div>
+                        <div class="flex-1 bg-red-100 border border-red-300 text-red-800 rounded-lg p-6 shadow-md text-center">
+                            <h2 class="text-lg font-bold">Absen Keluar</h2>
+                            <p class="text-gray-600">Libur</p>
+                        </div>
+                    @elseif($status === 'leave' || $status === 'sick')
                         <div class="flex-1 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-lg p-6 shadow-md text-center">
                             <h2 class="text-lg font-bold">Absen Masuk</h2>
                             <p class="text-gray-600">
