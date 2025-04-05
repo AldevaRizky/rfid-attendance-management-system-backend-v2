@@ -76,23 +76,33 @@
                                                 'leave' => 'bg-blue-100 text-blue-800 border border-blue-200',
                                                 'sick' => 'bg-purple-100 text-purple-800 border border-purple-200',
                                                 'absent' => 'bg-red-100 text-red-800 border border-red-200',
+                                                'holiday' => 'bg-gray-100 text-gray-800 border border-gray-300',
                                             ];
+
                                             $statusText = [
                                                 'present' => 'Hadir',
                                                 'late' => 'Terlambat',
                                                 'leave' => 'Izin',
                                                 'sick' => 'Sakit',
                                                 'absent' => 'Absen',
+                                                'holiday' => 'Libur',
                                             ];
                                         @endphp
                                         <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $statusClasses[$user['status']] }}">
                                             {{ $statusText[$user['status']] }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 border-b border-gray-200">{{ $user['check_in'] }}</td>
-                                    <td class="px-6 py-4 border-b border-gray-200">{{ $user['check_out'] }}</td>
+
+                                    <td class="px-6 py-4 border-b border-gray-200">
+                                        {{ $user['status'] === 'holiday' ? 'Libur' : $user['check_in'] }}
+                                    </td>
+
+                                    <td class="px-6 py-4 border-b border-gray-200">
+                                        {{ $user['status'] === 'holiday' ? 'Libur' : $user['check_out'] }}
+                                    </td>
+
                                     <td class="px-6 py-4 border-b border-gray-200 text-center">
-                                        @if($user['status'] === 'sick' || $user['status'] === 'leave')
+                                        @if(in_array($user['status'], ['sick', 'leave']))
                                             <button
                                                 class="bg-black text-white px-3 py-2 rounded text-xs font-semibold"
                                                 onclick="showLeaveDetails({{ $user['id'] }})">
