@@ -10,9 +10,17 @@ class AttendanceLog extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'rfid_card_id', 'shift_id', 'check_in_time',
-        'check_out_time', 'check_in_location', 'check_out_location',
-        'status', 'date', 'working_hours', 'overtime_hours'
+        'user_id',
+        'rfid_card_id',
+        'shift_id',
+        'check_in_time',
+        'check_out_time',
+        'check_in_location',
+        'check_out_location',
+        'status', //on time, late, early, absent
+        'date',
+        'working_hours',
+        'overtime_hours'
     ];
 
     public function user()
