@@ -16,7 +16,10 @@ class LeaveRequestController extends Controller
             ->where('end_date', '>=', now()->toDateString()) // Cek jika izin masih berlangsung
             ->first();
 
-        return view('employee.leave_request.create', compact('existingLeave'));
+        $currentDate = \Carbon\Carbon::now('Asia/Jakarta');
+        $isWeekend = $currentDate->isWeekend();
+
+        return view('employee.leave_request.create', compact('existingLeave', 'currentDate', 'isWeekend'));
     }
 
     public function store(Request $request)
