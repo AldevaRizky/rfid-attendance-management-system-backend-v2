@@ -117,6 +117,18 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $today = Carbon::today();
+        $currentDay = $today->locale('id')->isoFormat('dddd');
+
+        $isWeekend = $today->isWeekend();
+
+        if ($isWeekend) {
+            return view('dashboard.employee', [
+                'status' => 'weekend',
+                'check_in' => 'Libur',
+                'check_out' => 'Libur',
+                'currentDay' => $currentDay
+            ]);
+        }
 
         // Cek apakah user memiliki absensi hari ini
         $attendance = AttendanceLog::where('user_id', $user->id)
@@ -135,6 +147,7 @@ class DashboardController extends Controller
             'status' => $status,
             'check_in' => optional($attendance)->check_in_time ? Carbon::parse($attendance->check_in_time)->format('H:i') : '-',
             'check_out' => optional($attendance)->check_out_time ? Carbon::parse($attendance->check_out_time)->format('H:i') : '-',
+            'currentDay' => $currentDay
         ]);
     }
 }
