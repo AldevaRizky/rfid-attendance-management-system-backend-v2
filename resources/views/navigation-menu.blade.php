@@ -21,6 +21,9 @@
                         <x-nav-link href="{{ route('admin.rfid-cards.index') }}" :active="request()->routeIs('admin.rfid-cards.index')">
                             {{ __('RFID Card') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('admin.attendance') }}" :active="request()->routeIs('admin.attendance')">
+                            {{ __('Absensi') }}
+                        </x-nav-link>
                         <x-nav-link href="{{ route('admin.employees.index') }}" :active="request()->routeIs('admin.employees.index')">
                             {{ __('Employee') }}
                         </x-nav-link>
@@ -62,7 +65,7 @@
                         </div>
                     @else
                         <x-nav-link href="{{ route('employee.dashboard') }}" :active="request()->routeIs('employee.dashboard')">
-                            {{ __('Employee Dashboard') }}
+                            {{ __('Dashboard') }}
                         </x-nav-link>
                     @endif
                 </div>
