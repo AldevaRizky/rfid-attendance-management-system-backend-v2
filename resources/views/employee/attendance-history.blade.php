@@ -90,6 +90,7 @@
                                         'S' => 'text-yellow-600',
                                         'I' => 'text-blue-600',
                                         'A' => 'text-red-600',
+                                        'L' => $isSunday ? 'text-red-600' : 'text-gray-500',
                                         default => 'text-gray-400'
                                     };
                                 @endphp
