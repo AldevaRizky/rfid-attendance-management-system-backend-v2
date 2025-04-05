@@ -54,7 +54,10 @@ class AttendanceHistoryController extends Controller
             $status = '-';
             $leaveData = null;
 
-            if ($date <= $today) {
+            if ($date->isWeekend()) {
+                // Hari Sabtu dan Minggu dianggap libur
+                $status = 'L';
+            } elseif ($date <= $today) {
                 if ($leave) {
                     $status = $leave->type === 'sick' ? 'S' : 'I';
                     $stats[$leave->type === 'sick' ? 'Sakit' : 'Izin']++;
