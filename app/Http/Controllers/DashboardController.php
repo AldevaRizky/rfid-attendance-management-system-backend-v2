@@ -33,7 +33,9 @@ class DashboardController extends Controller
             ->whereDate('end_date', '>=', $today)
             ->where('type', 'sick')
             ->count();
-        $absent = $totalEmployees - ($present + $leave);
+
+        $isWeekend = $today->isSaturday() || $today->isSunday();
+        $absent = $isWeekend ? 0 : $totalEmployees - ($present + $leave);
 
         $stats = [
             'present' => $present,
@@ -81,6 +83,12 @@ class DashboardController extends Controller
 
     private function determineStatus($attendance, $leave)
     {
+        $today = Carbon::today();
+
+        if ($today->isWeekend()) {
+            return 'holiday';
+        }
+
         if ($leave) {
             return $leave->type === 'sick' ? 'sick' : 'leave';
         }
