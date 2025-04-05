@@ -10,7 +10,7 @@
     <x-slot name="form">
         <!-- Profile Photo -->
         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-            <div x-data="{photoName: null, photoPreview: '{{ $this->user->profile_photo_url ?: asset('default-profile.png') }}' }" class="col-span-6 sm:col-span-4">
+            <div x-data="{photoName: null, photoPreview: '{{ $this->user->profile_photo_path ? asset('storage/'.$this->user->profile_photo_path) : asset('images/default-profile.png') }}' }" class="col-span-6 sm:col-span-4">
                 <input type="file" id="photo" class="hidden"
                     wire:model.live="photo"
                     x-ref="photo"
@@ -26,8 +26,9 @@
                 <x-label for="photo" value="{{ __('Photo') }}" />
 
                 <div class="mt-2">
-                    <img x-bind:src="photoPreview ? photoPreview : '{{ $this->user->profile_photo_url ?: asset('default-profile.png') }}'"
-                         alt="{{ $this->user->name }}" class="rounded-full h-20 w-20 object-cover border-2 border-gray-300">
+                    <img x-bind:src="photoPreview || '{{ $this->user->profile_photo_url }}'"
+                         alt="{{ $this->user->name }}"
+                         class="rounded-full h-20 w-20 object-cover border-2 border-gray-300 block">
                 </div>
 
                 <x-secondary-button class="mt-2 me-2" type="button" x-on:click.prevent="$refs.photo.click()">
@@ -82,8 +83,12 @@
 
         <div class="col-span-6 sm:col-span-4">
             <x-label for="birth_date" value="{{ __('Birth Date') }}" />
-            <x-input id="birth_date" type="date" class="mt-1 block w-full" wire:model="state.birth_date" required :value="$this->user->birth_date ? $this->user->birth_date->format('Y-m-d') : ''" />
-            <x-input-error for="birth_date" class="mt-2" />
+            <x-input id="birth_date"
+            type="date"
+            class="mt-1 block w-full"
+            wire:model.live="state.birth_date"
+            :max="now()->format('Y-m-d')"
+            :value="optional($this->user->birth_date)->format('Y-m-d')" />
         </div>
 
         <div class="col-span-6 sm:col-span-4">
@@ -102,6 +107,30 @@
             <x-label for="address" value="{{ __('Address') }}" />
             <textarea id="address" class="mt-1 block w-full" wire:model="state.address" required></textarea>
             <x-input-error for="address" class="mt-2" />
+        </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <x-label value="{{ __('Division') }}" />
+            <x-input type="text"
+                    class="mt-1 block w-full bg-gray-100 cursor-not-allowed"
+                    value="{{ $this->user->division->name ?? '-' }}"
+                    readonly />
+        </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <x-label value="{{ __('Position') }}" />
+            <x-input type="text"
+                    class="mt-1 block w-full bg-gray-100 cursor-not-allowed"
+                    value="{{ $this->user->position->name ?? '-' }}"
+                    readonly />
+        </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <x-label value="{{ __('Education') }}" />
+            <x-input type="text"
+                    class="mt-1 block w-full bg-gray-100 cursor-not-allowed"
+                    value="{{ $this->user->education->name ?? '-' }}"
+                    readonly />
         </div>
     </x-slot>
 
