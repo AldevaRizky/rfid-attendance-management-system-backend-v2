@@ -10,7 +10,13 @@ class LeaveRequest extends Model
     use HasFactory;
 
     // Kolom yang dapat diisi sesuai perubahan tabel
-    protected $fillable = ['user_id', 'type', 'start_date', 'end_date', 'reason', 'attachment'];
+    protected $fillable = ['user_id',
+    'type', //sick, personal
+    'start_date',
+    'end_date',
+    'reason',
+    'attachment'
+];
 
     /**
      * Relasi ke model User (pemilik izin)
