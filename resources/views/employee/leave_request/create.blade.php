@@ -16,7 +16,11 @@
                     </div>
                 @endif
 
-                @if($existingLeave)
+                @if($isWeekend)
+                    <div class="bg-red-100 text-red-800 p-4 rounded-lg mb-4">
+                        <strong>Mohon maaf,</strong> pengajuan izin tidak dapat dilakukan pada hari <span class="font-bold">{{ $currentDate->translatedFormat('l') }}</span> (Sabtu/Minggu).
+                    </div>
+                @elseif($existingLeave)
                     <div class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mb-4">
                         <strong>Anda sudah mengajukan izin</strong> hingga <span class="font-bold">{{ \Carbon\Carbon::parse($existingLeave->end_date)->translatedFormat('d F Y') }}</span>.
                         Anda tidak dapat mengajukan izin baru sampai tanggal tersebut.
