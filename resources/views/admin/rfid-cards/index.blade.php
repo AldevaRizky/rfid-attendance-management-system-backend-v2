@@ -77,9 +77,11 @@
                                                 data-id="{{ $card->id }}"
                                                 data-card_number="{{ $card->card_number }}"
                                                 data-user_id="{{ $card->user_id }}"
+                                                data-user_name="{{ $card->user->name ?? '' }}"
+                                                data-user_nip="{{ $card->user->nip ?? '' }}"
                                                 data-status="{{ $card->status }}"
-                                                data-issued_date="{{ $card->issued_date }}"
-                                                data-expired_date="{{ $card->expired_date }}">
+                                                data-issued_date="{{ $card->issued_date ? $card->issued_date->format('Y-m-d') : '' }}"
+                                                data-expired_date="{{ $card->expired_date ? $card->expired_date->format('Y-m-d') : '' }}"
                                             <i class="fas fa-edit"></i> Edit
                                         </button>
                                         <button class="btn btn-sm btn-danger delete-btn" data-id="{{ $card->id }}">
@@ -225,27 +227,39 @@
     <script>
         // Handle edit button click
         document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const cardId = this.getAttribute('data-id');
-                const cardNumber = this.getAttribute('data-card_number');
-                const userId = this.getAttribute('data-user_id');
-                const status = this.getAttribute('data-status');
-                const issuedDate = this.getAttribute('data-issued_date');
-                const expiredDate = this.getAttribute('data-expired_date');
+        button.addEventListener('click', function() {
+            const cardId = this.getAttribute('data-id');
+            const cardNumber = this.getAttribute('data-card_number');
+            const userId = this.getAttribute('data-user_id');
+            const userName = this.getAttribute('data-user_name');
+            const userNip = this.getAttribute('data-user_nip');
+            const status = this.getAttribute('data-status');
+            const issuedDate = this.getAttribute('data-issued_date');
+            const expiredDate = this.getAttribute('data-expired_date');
 
-                document.getElementById('edit_card_number').value = cardNumber;
-                document.getElementById('edit_user_id').value = userId;
-                document.getElementById('edit_status').value = status;
-                document.getElementById('edit_issued_date').value = issuedDate;
-                document.getElementById('edit_expired_date').value = expiredDate;
+            // Tambahkan opsi user jika belum ada
+            const userSelect = document.getElementById('edit_user_id');
+            if (userId && !userSelect.querySelector(`option[value="${userId}"]`)) {
+                const newOption = document.createElement('option');
+                newOption.value = userId;
+                newOption.textContent = `${userName} (${userNip})`;
+                userSelect.appendChild(newOption);
+            }
 
-                const form = document.getElementById('editForm');
-                form.action = `/admin/rfid-cards/${cardId}`;
+            // Set nilai form
+            document.getElementById('edit_card_number').value = cardNumber;
+            userSelect.value = userId;
+            document.getElementById('edit_status').value = status;
+            document.getElementById('edit_issued_date').value = issuedDate;
+            document.getElementById('edit_expired_date').value = expiredDate;
 
-                const modal = new bootstrap.Modal(document.getElementById('editRfidCardModal'));
-                modal.show();
-            });
+            const form = document.getElementById('editForm');
+            form.action = `/admin/rfid-cards/${cardId}`;
+
+            const modal = new bootstrap.Modal(document.getElementById('editRfidCardModal'));
+            modal.show();
         });
+    });
 
         // Handle delete button click
         document.querySelectorAll('.delete-btn').forEach(button => {
