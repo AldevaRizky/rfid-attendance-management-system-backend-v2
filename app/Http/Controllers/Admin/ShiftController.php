@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Shift;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ShiftController extends Controller
 {
@@ -46,7 +47,12 @@ class ShiftController extends Controller
     public function update(Request $request, Shift $shift)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:100|unique:shifts',
+            'name' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('shifts')->ignore($shift->id),
+            ],
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'grace_period' => 'required|integer|min:0',
