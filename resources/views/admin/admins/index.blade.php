@@ -63,7 +63,13 @@
                                 @foreach($admins as $admin)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($admin->profile_photo_path)
+                                            <img class="h-10 w-10 rounded-full object-cover"
+                                                 src="{{ asset('storage/'.$admin->profile_photo_path) }}"
+                                                 alt="{{ $admin->name }}">
+                                        @else
                                         <img class="h-10 w-10 rounded-full object-cover" src="{{ $admin->profile_photo_url }}" alt="{{ $admin->name }}">
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="font-medium text-gray-900">{{ $admin->name }}</div>
