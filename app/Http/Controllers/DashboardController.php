@@ -48,30 +48,31 @@ class DashboardController extends Controller
 
         // Get all users with their status
         $users = User::with(['division', 'position'])
-            ->where('role', 'employee')
-            ->get()
-            ->map(function ($user) use ($today) {
-                $attendance = AttendanceLog::where('user_id', $user->id)
-                    ->whereDate('date', $today)
-                    ->first();
+        ->where('role', 'employee')
+        ->get()
+        ->map(function ($user) use ($today) {
+            $attendance = AttendanceLog::with('shift')
+                ->where('user_id', $user->id)
+                ->whereDate('date', $today)
+                ->first();
 
-                $leave = LeaveRequest::where('user_id', $user->id)
-                    ->whereDate('start_date', '<=', $today)
-                    ->whereDate('end_date', '>=', $today)
-                    ->first();
+            $leave = LeaveRequest::where('user_id', $user->id)
+                ->whereDate('start_date', '<=', $today)
+                ->whereDate('end_date', '>=', $today)
+                ->first();
 
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'nip' => $user->nip,
-                    'division' => $user->division->name ?? '-',
-                    'position' => $user->position->name ?? '-',
-                    'shift' => '-',
-                    'status' => $this->determineStatus($attendance, $leave),
-                    'check_in' => optional($attendance)->check_in_time ? Carbon::parse($attendance->check_in_time)->setTimezone('Asia/Jakarta') : '-',
-                    'check_out' => optional($attendance)->check_out_time ? Carbon::parse($attendance->check_out_time)->setTimezone('Asia/Jakarta') : '-',
-                ];
-            });
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'nip' => $user->nip,
+                'division' => $user->division->name ?? '-',
+                'position' => $user->position->name ?? '-',
+                'shift' => $attendance && $attendance->shift ? $attendance->shift->name : '-',
+                'status' => $this->determineStatus($attendance, $leave),
+                'check_in' => optional($attendance)->check_in_time ? Carbon::parse($attendance->check_in_time)->setTimezone('Asia/Jakarta') : '-',
+                'check_out' => optional($attendance)->check_out_time ? Carbon::parse($attendance->check_out_time)->setTimezone('Asia/Jakarta') : '-',
+            ];
+        });
 
         return view('dashboard.admin', [
             'users' => $users,
